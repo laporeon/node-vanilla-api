@@ -1,16 +1,15 @@
 const { createServer } = require("node:http");
 const { URL } = require("node:url");
-const path = require("node:path");
-const fs = require("node:fs");
 
+const MovieController = require("./controllers/movie.controller");
 const generateResponse = require("./utils/response");
 
 const PORT = 8001;
 
-const filePath = path.resolve(__dirname, "data", "movies.json");
-
-const server = createServer((request, response) => {
+const server = createServer(async (request, response) => {
   const { method, url } = request;
+
+  const movieController = new MovieController(response);
 
   const baseURL = new URL(`http://localhost:${PORT}${url}`);
 
@@ -22,19 +21,8 @@ const server = createServer((request, response) => {
     });
   }
 
-  if (route.match("/movies") && method === "GET") {
-    const params = route.split("/")[2] || "";
-
-    if (params === "") {
-      const movies = fs.readFileSync(filePath, "utf-8");
-      return generateResponse(response, 200, movies);
-    }
-
-    console.log({ params });
-
-    return generateResponse(response, 200, {
-      message: `Searching for params ${params}`,
-    });
+  if (route === "/movies" && method === "GET") {
+    return await movieController.getAllMovies(response, request);
   }
 
   // 404 - Route Not Found
