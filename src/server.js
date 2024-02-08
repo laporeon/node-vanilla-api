@@ -3,6 +3,7 @@ const { URL } = require("node:url");
 
 const MovieController = require("./controllers/movie.controller");
 const generateResponse = require("./utils/response");
+const { GET_ROUTE, POST_ROUTE } = require("./utils/routes");
 
 const PORT = 8001;
 
@@ -21,8 +22,29 @@ const server = createServer(async (request, response) => {
     });
   }
 
-  if (route === "/movies" && method === "GET") {
-    return await movieController.getAllMovies(response, request);
+  if (method === "POST" && route.match(POST_ROUTE)) {
+    return generateResponse(response, 201, {
+      message: "POST method isn't implemented yet",
+    });
+  }
+
+  if (method === "GET" && route.match(GET_ROUTE)) {
+    const param = request.url.split("/")[2] || "";
+    if (param === "") return await movieController.getAllMovies();
+
+    return await movieController.getMovieById(param);
+  }
+
+  if (method === "PUT" && route.match(GET_ROUTE)) {
+    return generateResponse(response, 404, {
+      message: "PUT method isn't implemented yet",
+    });
+  }
+
+  if (method === "DELETE" && route.match(GET_ROUTE)) {
+    return generateResponse(response, 404, {
+      message: "DELETE method isn't implemented yet",
+    });
   }
 
   // 404 - Route Not Found
