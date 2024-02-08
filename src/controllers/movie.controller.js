@@ -11,6 +11,11 @@ class MovieController {
     const movies = await this.movieService.getMovies();
     return generateResponse(this.response, 200, movies);
   }
+
+  async getMovieById(param) {
+    const movie = await this.movieService.getMovieById(param);
+    return generateResponse(this.response, 200, movie);
+  }
 }
 
 module.exports = MovieController;
