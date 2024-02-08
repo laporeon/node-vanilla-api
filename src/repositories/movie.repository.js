@@ -7,8 +7,15 @@ class MovieRepository {
   }
 
   async get() {
-    const data = await fs.readFile(this.file, "utf-8");
-    return data;
+    const movies = await fs.readFile(this.file, "utf-8");
+    return movies;
+  }
+
+  async findById(param) {
+    const movies = await this.get();
+    const parsedMovies = JSON.parse(movies);
+    const movie = parsedMovies.filter((movie) => movie.id === Number(param));
+    return movie;
   }
 }
 
