@@ -11,6 +11,13 @@ class MovieService {
 
     return movies;
   }
+
+  async getMovieById(param) {
+    // TODO: Error Handler
+    const movie = await this.movieRepository.findById(param);
+
+    return movie;
+  }
 }
 
 module.exports = MovieService;
