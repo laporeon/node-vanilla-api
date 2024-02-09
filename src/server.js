@@ -23,9 +23,7 @@ const server = createServer(async (request, response) => {
   }
 
   if (method === "POST" && route.match(POST_ROUTE)) {
-    return generateResponse(response, 201, {
-      message: "POST method isn't implemented yet",
-    });
+    return await movieController.createMovie(request);
   }
 
   if (method === "GET" && route.match(GET_ROUTE)) {
