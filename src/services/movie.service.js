@@ -1,6 +1,8 @@
 const { randomUUID } = require("node:crypto");
+const http = require("node:http");
 
 const MovieRepository = require("../repositories/movie.repository");
+const { NotFoundError, RequiredFieldError } = require("../errors/errors");
 
 class MovieService {
   constructor() {
@@ -18,23 +20,48 @@ class MovieService {
     // TODO: Error Handler
     const movie = await this.movieRepository.findById(param);
 
+    if (!movie) {
+      throw new NotFoundError(param);
+    }
+
     return movie;
   }
 
-  async create(body) {
+  async create(request) {
     // TODO: Error Handler and body validations!
-    const { name, year, director } = body;
 
-    const movie = {
-      id: randomUUID(),
-      name,
-      year,
-      director,
-    };
+    return new Promise((resolve, reject) => {
+      let body = "";
 
-    await this.movieRepository.create(movie);
+      request.on("data", (chunk) => {
+        body += chunk;
+      });
 
-    return movie;
+      request.on("end", async () => {
+        try {
+          const parsedBody = JSON.parse(body);
+
+          const { name, year, director } = parsedBody;
+
+          if (!name || !year || !director) {
+            throw new RequiredFieldError();
+          }
+
+          const movie = {
+            id: randomUUID(),
+            name,
+            year,
+            director,
+          };
+
+          await this.movieRepository.create(movie);
+
+          resolve(movie);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 }
 
