@@ -27,9 +27,9 @@ class MovieRepository {
     return movies;
   }
 
-  async findById(param) {
+  async findById(id) {
     const movies = await this.get();
-    const movie = movies.filter((movie) => movie.id === Number(param));
+    const movie = movies.filter((movie) => movie.id === id);
     return movie;
   }
 
