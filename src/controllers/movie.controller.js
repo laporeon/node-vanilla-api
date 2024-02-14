@@ -12,23 +12,14 @@ class MovieController {
     return generateResponse(this.response, 200, movies);
   }
 
-  async getMovieById(param) {
+  async getMovieById(param = "") {
     const movie = await this.movieService.getMovieById(param);
     return generateResponse(this.response, 200, movie);
   }
 
   async createMovie(request) {
-    let body = "";
-    request.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-
-    request.on("end", async () => {
-      const parsedBody = JSON.parse(body);
-
-      const movie = await this.movieService.create(parsedBody);
-      return generateResponse(this.response, 201, movie);
-    });
+    const movie = await this.movieService.create(request);
+    return generateResponse(this.response, 201, movie);
   }
 }
 
