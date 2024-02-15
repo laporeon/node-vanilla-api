@@ -14,7 +14,6 @@ class MovieService {
   }
 
   async getMovies() {
-    // TODO: Error Handler
     const movies = await this.movieRepository.get();
 
     return movies;
