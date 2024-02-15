@@ -2,7 +2,11 @@ const { randomUUID } = require("node:crypto");
 const http = require("node:http");
 
 const MovieRepository = require("../repositories/movie.repository");
-const { NotFoundError, RequiredFieldError } = require("../errors/errors");
+const {
+  NotFoundError,
+  RequiredFieldError,
+  InvalidInputError,
+} = require("../errors/errors");
 
 class MovieService {
   constructor() {
@@ -17,7 +21,6 @@ class MovieService {
   }
 
   async getMovieById(param) {
-    // TODO: Error Handler
     const movie = await this.movieRepository.findById(param);
 
     if (!movie) {
@@ -28,8 +31,6 @@ class MovieService {
   }
 
   async create(request) {
-    // TODO: Error Handler and body validations!
-
     return new Promise((resolve, reject) => {
       let body = "";
 
@@ -45,6 +46,10 @@ class MovieService {
 
           if (!name || !year || !director) {
             throw new RequiredFieldError();
+          }
+
+          if (!Number.isInteger(year)) {
+            throw new InvalidInputError("Year must be an integer number.");
           }
 
           const movie = {
