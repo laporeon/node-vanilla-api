@@ -14,7 +14,16 @@ class NotFoundError extends Error {
   }
 }
 
+class InvalidInputError extends Error {
+  constructor(message, statusCode = 400, contentType = "application/json") {
+    super(message);
+    this.statusCode = statusCode;
+    this.contentType = { "content-type": contentType };
+  }
+}
+
 module.exports = {
   RequiredFieldError,
   NotFoundError,
+  InvalidInputError,
 };
