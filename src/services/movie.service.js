@@ -23,7 +23,7 @@ class MovieService {
     const movie = await this.movieRepository.findById(param);
 
     if (!movie) {
-      throw new NotFoundError(param);
+      throw new NotFoundError();
     }
 
     return movie;
@@ -48,7 +48,7 @@ class MovieService {
           }
 
           if (!Number.isInteger(year)) {
-            throw new InvalidInputError("Year must be an integer number.");
+            throw new InvalidInputError("Year must be type number.");
           }
 
           const movie = {
