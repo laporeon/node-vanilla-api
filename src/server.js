@@ -49,7 +49,7 @@ const server = createServer(async (request, response) => {
 
     // // 404 - Route Not Found
     return generateResponse(response, 404, {
-      error: `Route [${url}] not found!`,
+      error: `Cannot ${method} ${route}`,
     });
   } catch (error) {
     errorHandler(response, error);
