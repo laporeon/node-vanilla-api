@@ -3,14 +3,16 @@ class RequiredFieldError extends Error {
     super("Missing one or more required fields!");
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
+    this.name = "RequiredFieldError";
   }
 }
 
 class NotFoundError extends Error {
-  constructor(id, statusCode = 404, contentType = "application/json") {
-    super(`No movie found with id: ${id}`);
+  constructor(statusCode = 404, contentType = "application/json") {
+    super("Resource not found.");
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
+    this.name = "NotFoundError";
   }
 }
 
@@ -19,6 +21,7 @@ class InvalidInputError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
+    this.name = "InvalidInputError";
   }
 }
 
