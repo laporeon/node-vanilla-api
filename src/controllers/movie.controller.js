@@ -21,6 +21,11 @@ class MovieController {
     const movie = await this.movieService.create(request);
     return generateResponse(this.response, 201, movie);
   }
+
+  async deleteMovie(param) {
+    await this.movieService.delete(param);
+    return generateResponse(this.response, 204, []);
+  }
 }
 
 module.exports = MovieController;
