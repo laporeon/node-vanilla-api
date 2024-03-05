@@ -42,9 +42,8 @@ const server = createServer(async (request, response) => {
     }
 
     if (method === "DELETE" && route.match(GET_ROUTE)) {
-      return generateResponse(response, 404, {
-        message: "DELETE method isn't implemented yet",
-      });
+      const param = request.url.split("/")[2] || "";
+      return await movieController.deleteMovie(param);
     }
 
     // // 404 - Route Not Found
