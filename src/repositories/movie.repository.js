@@ -38,11 +38,26 @@ class MovieRepository {
   async create(movie) {
     const { id, name, year, director } = movie;
 
-    await fs.appendFile(
-      this.file,
-      `\n${id};${name};${year};${director}`,
-      "utf-8"
-    );
+    await fs.writeFile(this.file, `\n${id};${name};${year};${director}`, {
+      flag: "a",
+      encoding: "utf8",
+    });
+  }
+
+  async delete(movie) {
+    const fileContent = await fs.readFile(this.file, "utf-8");
+
+    let data = fileContent.split("\n");
+
+    const indexToRemove = data.findIndex((line) => line.startsWith(movie.id));
+
+    data.splice(indexToRemove, 1);
+
+    await this.rewrite(data);
+  }
+
+  async rewrite(data) {
+    await fs.writeFile(this.file, data.join("\n"));
   }
 }
 
