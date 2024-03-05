@@ -67,6 +67,18 @@ class MovieService {
       });
     });
   }
+
+  async delete(param) {
+    const movie = await this.movieRepository.findById(param);
+
+    if (!movie) {
+      throw new NotFoundError();
+    }
+
+    await this.movieRepository.delete(movie);
+
+    return [];
+  }
 }
 
 module.exports = MovieService;
