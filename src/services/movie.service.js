@@ -6,6 +6,7 @@ const {
   NotFoundError,
   RequiredFieldError,
   InvalidInputError,
+  AlreadyRegisteredError,
 } = require("../errors/errors");
 
 class MovieService {
@@ -41,20 +42,49 @@ class MovieService {
         try {
           const parsedBody = JSON.parse(body);
 
-          const { name, year, director } = parsedBody;
+          const { title, year, genre, duration, ageRating, director } =
+            parsedBody;
 
-          if (!name || !year || !director) {
+          if (
+            !title ||
+            !year ||
+            !genre ||
+            !duration ||
+            !ageRating ||
+            !director
+          ) {
             throw new RequiredFieldError();
           }
+
+          // TODO: find a better way to validate all the required fields
 
           if (!Number.isInteger(year)) {
             throw new InvalidInputError("Year must be type number.");
           }
 
+          if (!Number.isInteger(ageRating)) {
+            throw new InvalidInputError("Age Rating must be type number.");
+          }
+
+          if (!Number.isInteger(duration)) {
+            throw new InvalidInputError(
+              "Movie duration must be type number and sent in minutes format e.g 146"
+            );
+          }
+
+          const hasMovie = await this.movieRepository.findByTitle(title);
+
+          if (hasMovie) {
+            throw new AlreadyRegisteredError();
+          }
+
           const movie = {
             id: randomUUID(),
-            name,
+            title,
             year,
+            genre,
+            duration,
+            ageRating,
             director,
           };
 
