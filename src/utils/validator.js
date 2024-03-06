@@ -1,6 +1,10 @@
 const { RequiredFieldError, InvalidInputError } = require("../errors/errors");
 
 class Validator {
+  constructor() {
+    this.errors = [];
+  }
+
   async execute(fields) {
     const { title, year, genre, duration, ageRating, director } = fields;
 
@@ -9,17 +13,21 @@ class Validator {
     }
 
     if (!Number.isInteger(year)) {
-      throw new InvalidInputError("Year must be type number.");
+      this.errors.push("YEAR must be type number.");
     }
 
     if (!Number.isInteger(ageRating)) {
-      throw new InvalidInputError("Age Rating must be type number.");
+      this.errors.push("AGE REATING must be type number.");
     }
 
     if (!Number.isInteger(duration)) {
-      throw new InvalidInputError(
-        "Movie duration must be type number and sent in minutes format e.g 146"
+      this.errors.push(
+        "DURATION must be type number and sent in minutes format e.g 146"
       );
+    }
+
+    if (this.errors.length > 0) {
+      throw new InvalidInputError(this.errors.join(" "));
     }
   }
 }
