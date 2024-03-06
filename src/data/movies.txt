@@ -1,1 +1,1 @@
-id;name;year;director
+id;title;year;genre;duration;ageRating;director
