@@ -1,5 +1,6 @@
 const MovieService = require("../services/movie.service");
 const generateResponse = require("../utils/response");
+const HTTPStatus = require("../utils/httpStatus");
 
 class MovieController {
   constructor(response) {
@@ -9,22 +10,22 @@ class MovieController {
 
   async getAllMovies() {
     const movies = await this.movieService.getMovies();
-    return generateResponse(this.response, 200, movies);
+    return generateResponse(this.response, HTTPStatus.OK, movies);
   }
 
   async getMovieById(param = "") {
     const movie = await this.movieService.getMovieById(param);
-    return generateResponse(this.response, 200, movie);
+    return generateResponse(this.response, HTTPStatus.OK, movie);
   }
 
   async createMovie(request) {
     const movie = await this.movieService.create(request);
-    return generateResponse(this.response, 201, movie);
+    return generateResponse(this.response, HTTPStatus.CREATED, movie);
   }
 
   async deleteMovie(param) {
     await this.movieService.delete(param);
-    return generateResponse(this.response, 204, []);
+    return generateResponse(this.response, HTTPStatus.NO_CONTENT, []);
   }
 }
 
