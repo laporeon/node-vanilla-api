@@ -8,6 +8,11 @@ class MovieController {
     this.movieService = new MovieService();
   }
 
+  async createMovie(request) {
+    const movie = await this.movieService.create(request);
+    return generateResponse(this.response, HTTPStatus.CREATED, movie);
+  }
+
   async getAllMovies() {
     const movies = await this.movieService.getMovies();
     return generateResponse(this.response, HTTPStatus.OK, movies);
@@ -18,9 +23,9 @@ class MovieController {
     return generateResponse(this.response, HTTPStatus.OK, movie);
   }
 
-  async createMovie(request) {
-    const movie = await this.movieService.create(request);
-    return generateResponse(this.response, HTTPStatus.CREATED, movie);
+  async updateMovie(request) {
+    const movie = await this.movieService.update(request);
+    return generateResponse(this.response, HTTPStatus.OK, movie);
   }
 
   async deleteMovie(param) {
