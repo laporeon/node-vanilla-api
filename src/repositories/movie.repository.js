@@ -6,6 +6,19 @@ class MovieRepository {
     this.file = path.resolve(__dirname, "..", "data", "movies.txt");
   }
 
+  async create(movie) {
+    const { id, title, year, genre, duration, ageRating, director } = movie;
+
+    await fs.writeFile(
+      this.file,
+      `\n${id};${title};${year};${genre};${ageRating};${duration};${director}`,
+      {
+        flag: "a",
+        encoding: "utf8",
+      }
+    );
+  }
+
   async get() {
     const fileContent = await fs.readFile(this.file, "utf-8");
 
@@ -22,8 +35,8 @@ class MovieRepository {
         title,
         year: parseInt(year),
         genre,
-        duration,
-        ageRating,
+        duration: parseInt(duration),
+        ageRating: parseInt(ageRating),
         director,
       };
     });
@@ -31,7 +44,7 @@ class MovieRepository {
     return movies;
   }
 
-  async findById(id) {
+  async getByID(id) {
     const movies = await this.get();
     const movie = movies.find((m) => {
       if (m.id === id) return m;
@@ -39,17 +52,22 @@ class MovieRepository {
     return movie;
   }
 
-  async create(movie) {
+  async update(movie) {
+    const fileContent = await fs.readFile(this.file, "utf-8");
+
+    let data = fileContent.split("\n");
+
+    const indexToRemove = data.findIndex((line) => line.startsWith(movie.id));
+
     const { id, title, year, genre, duration, ageRating, director } = movie;
 
-    await fs.writeFile(
-      this.file,
-      `\n${id};${title};${year};${genre};${ageRating};${duration};${director}`,
-      {
-        flag: "a",
-        encoding: "utf8",
-      }
+    data.splice(
+      indexToRemove,
+      1,
+      `${id};${title};${year};${genre};${ageRating};${duration};${director}`
     );
+
+    await this.overwrite(data);
   }
 
   async delete(movie) {
@@ -61,14 +79,14 @@ class MovieRepository {
 
     data.splice(indexToRemove, 1);
 
-    await this.rewrite(data);
+    await this.overwrite(data);
   }
 
-  async rewrite(data) {
+  async overwrite(data) {
     await fs.writeFile(this.file, data.join("\n"));
   }
 
-  async findByTitle(title) {
+  async getByTitle(title) {
     const movies = await this.get();
 
     const movie = movies.find((m) => {
