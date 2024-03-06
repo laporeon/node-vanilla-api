@@ -14,12 +14,16 @@ class MovieRepository {
     if (!data) return [];
 
     const movies = data.map((movie) => {
-      const [id, name, year, director] = movie.split(";");
+      const [id, title, year, genre, duration, ageRating, director] =
+        movie.split(";");
 
       return {
         id,
-        name,
+        title,
         year: parseInt(year),
+        genre,
+        duration,
+        ageRating,
         director,
       };
     });
@@ -36,12 +40,16 @@ class MovieRepository {
   }
 
   async create(movie) {
-    const { id, name, year, director } = movie;
+    const { id, title, year, genre, duration, ageRating, director } = movie;
 
-    await fs.writeFile(this.file, `\n${id};${name};${year};${director}`, {
-      flag: "a",
-      encoding: "utf8",
-    });
+    await fs.writeFile(
+      this.file,
+      `\n${id};${title};${year};${genre};${ageRating};${duration};${director}`,
+      {
+        flag: "a",
+        encoding: "utf8",
+      }
+    );
   }
 
   async delete(movie) {
@@ -58,6 +66,16 @@ class MovieRepository {
 
   async rewrite(data) {
     await fs.writeFile(this.file, data.join("\n"));
+  }
+
+  async findByTitle(title) {
+    const movies = await this.get();
+
+    const movie = movies.find((m) => {
+      if (m.title === title) return m;
+    });
+
+    return movie;
   }
 }
 
