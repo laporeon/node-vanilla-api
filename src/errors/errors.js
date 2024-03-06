@@ -1,5 +1,10 @@
+const HTTPStatus = require("../utils/httpStatus");
+
 class RequiredFieldError extends Error {
-  constructor(statusCode = 400, contentType = "application/json") {
+  constructor(
+    statusCode = HTTPStatus.BAD_REQUEST,
+    contentType = "application/json"
+  ) {
     super("Missing one or more required fields!");
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
@@ -8,7 +13,10 @@ class RequiredFieldError extends Error {
 }
 
 class NotFoundError extends Error {
-  constructor(statusCode = 404, contentType = "application/json") {
+  constructor(
+    statusCode = HTTPStatus.NOT_FOUND,
+    contentType = "application/json"
+  ) {
     super("Resource not found.");
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
@@ -17,7 +25,11 @@ class NotFoundError extends Error {
 }
 
 class InvalidInputError extends Error {
-  constructor(message, statusCode = 400, contentType = "application/json") {
+  constructor(
+    message,
+    statusCode = HTTPStatus.BAD_REQUEST,
+    contentType = "application/json"
+  ) {
     super(message);
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
@@ -25,8 +37,23 @@ class InvalidInputError extends Error {
   }
 }
 
+// TODO: find a better name and a better message return for this error
+class AlreadyRegisteredError extends Error {
+  constructor(
+    message,
+    statusCode = HTTPStatus.CONFLICT,
+    contentType = "application/json"
+  ) {
+    super("Movie already registered.");
+    this.statusCode = statusCode;
+    this.contentType = { "content-type": contentType };
+    this.name = "AlreadyRegisteredError";
+  }
+}
+
 module.exports = {
   RequiredFieldError,
   NotFoundError,
   InvalidInputError,
+  AlreadyRegisteredError,
 };
