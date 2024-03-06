@@ -37,9 +37,7 @@ const server = createServer(async (request, response) => {
     }
 
     if (method === "PUT" && route.match(GET_ROUTE)) {
-      return generateResponse(response, HTTPStatus.NOT_FOUND, {
-        message: "PUT method isn't implemented yet",
-      });
+      return await movieController.updateMovie(request);
     }
 
     if (method === "DELETE" && route.match(GET_ROUTE)) {
