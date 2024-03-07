@@ -30,7 +30,7 @@ class MovieService {
           const hasMovie = await this.movieRepository.getByTitle(title);
 
           if (hasMovie) {
-            throw new AlreadyRegisteredError();
+            throw new AlreadyRegisteredError("Movie already registered.");
           }
 
           const movie = {
