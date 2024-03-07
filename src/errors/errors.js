@@ -44,7 +44,7 @@ class AlreadyRegisteredError extends Error {
     statusCode = HTTPStatus.CONFLICT,
     contentType = "application/json"
   ) {
-    super("Movie already registered.");
+    super(message);
     this.statusCode = statusCode;
     this.contentType = { "content-type": contentType };
     this.name = "AlreadyRegisteredError";
