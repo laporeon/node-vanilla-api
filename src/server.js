@@ -2,7 +2,7 @@ const { createServer } = require("node:http");
 const { URL } = require("node:url");
 
 const MovieController = require("./controllers/movie.controller");
-const generateResponse = require("./utils/response");
+const buildResponse = require("./utils/response");
 const errorHandler = require("./errors/errorHandler");
 const HTTPStatus = require("./utils/httpStatus");
 const { GET_ROUTE, POST_ROUTE } = require("./utils/routes");
@@ -20,7 +20,7 @@ const server = createServer(async (request, response) => {
 
   try {
     if (route === "/") {
-      return generateResponse(response, HTTPStatus.OK, {
+      return buildResponse(response, HTTPStatus.OK, {
         message: "Welcome to Node Vanilla API!",
       });
     }
@@ -46,7 +46,7 @@ const server = createServer(async (request, response) => {
     }
 
     // // 404 - Route Not Found
-    return generateResponse(response, HTTPStatus.NOT_FOUND, {
+    return buildResponse(response, HTTPStatus.NOT_FOUND, {
       error: `Cannot ${method} ${route}`,
     });
   } catch (error) {
