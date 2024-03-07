@@ -57,12 +57,12 @@ class MovieRepository {
 
     let data = fileContent.split("\n");
 
-    const indexToRemove = data.findIndex((line) => line.startsWith(movie.id));
+    const indexToUpdate = data.findIndex((line) => line.startsWith(movie.id));
 
     const { id, title, year, genre, duration, ageRating, director } = movie;
 
     data.splice(
-      indexToRemove,
+      indexToUpdate,
       1,
       `${id};${title};${year};${genre};${ageRating};${duration};${director}`
     );
