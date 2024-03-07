@@ -1,4 +1,4 @@
-function generateResponse(response, statusCode, data) {
+function buildResponse(response, statusCode, data) {
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader(
     "Access-Control-Allow-Methods",
@@ -10,4 +10,4 @@ function generateResponse(response, statusCode, data) {
   return response.end();
 }
 
-module.exports = generateResponse;
+module.exports = buildResponse;
